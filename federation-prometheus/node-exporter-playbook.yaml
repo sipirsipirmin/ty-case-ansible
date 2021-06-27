@@ -1,0 +1,4 @@
+---
+- hosts: prometheus-fedaration
+  roles:
+  - ansible-node-exporter  

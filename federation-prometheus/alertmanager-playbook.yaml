@@ -1,0 +1,11 @@
+---
+- hosts: prometheus-fedaration
+  roles:
+    - ansible-alertmanager
+  vars:
+    alertmanager_version: latest
+    alertmanager_route:
+      group_by: ['alertname', 'cluster', 'service']
+      group_wait: 30s
+      group_interval: 3m
+      repeat_interval: 3h
