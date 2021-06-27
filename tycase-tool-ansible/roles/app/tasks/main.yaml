@@ -1,0 +1,57 @@
+---
+
+- name: Install a list of packages (suitable replacement for 2.11 loop deprecation warning)
+  yum:
+    name:
+      - python3
+      - supervisor
+    state: present
+
+- name: Enable supervisord
+  ansible.builtin.service:
+    name: supervisord
+    enabled: yes
+
+- name: Create a directory if it does not exist
+  ansible.builtin.file:
+    path: /var/www
+    state: directory
+    mode: '0755'
+
+
+- name: Clone source repository
+  ansible.builtin.git:
+    repo: https://github.com/sipirsipirmin/tycase.git
+    dest: /var/www/ty-case
+
+
+- name: configure supervisor
+  template:
+    src: ty-case.ini
+    dest: /etc/supervisord.d/ty-case.ini
+    mode: 0644
+    owner: root
+    group: root
+
+
+- name: configure cluster_local.py
+  template:
+    src: cluster_local.py
+    dest: /var/www/ty-case/cluster_local.py
+    mode: 0644
+    owner: root
+    group: root
+
+
+- name: Install requirements
+  pip: 
+    requirements: /var/www/ty-case/requirements.txt
+    virtualenv: /var/www/.env
+    virtualenv_python: python3
+
+
+- name: update supervisor
+  shell: supervisorctl update
+
+- name: restart supervisor
+  shell: supervisorctl restart all

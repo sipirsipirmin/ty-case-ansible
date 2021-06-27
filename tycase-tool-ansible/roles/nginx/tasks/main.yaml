@@ -1,0 +1,27 @@
+---
+- name: Install a list of packages (suitable replacement for 2.11 loop deprecation warning)
+  yum:
+    name:
+      - nginx
+    state: present
+
+- name: copy nginx configuration
+  template:
+    src: nginx.conf
+    dest: /etc/nginx/nginx.comf
+    mode: 0644
+    owner: root
+    group: root
+
+- name: configure default nginx conf
+  template:
+    src: default_nginx_virtual_host.conf
+    dest: /etc/nginx/conf.d/default.conf
+    mode: 0644
+    owner: root
+    group: root
+
+- name: Restart service nginx
+  ansible.builtin.service:
+    name: nginx
+    state: restarted
