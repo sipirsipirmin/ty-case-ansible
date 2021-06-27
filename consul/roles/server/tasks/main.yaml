@@ -1,0 +1,30 @@
+---
+- name: Add repository
+  yum_repository:
+    name: epel
+    description: HC YUM repo
+    baseurl: https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
+
+- name: Install consul
+  yum:
+    name:
+      - consul
+    state: present
+
+- name: configure server
+  template:
+    src: consul.hcl
+    dest: /etc/consul.d/consul.hcl
+    mode: 0644
+    owner: root
+    group: root
+
+- name: Enable consul
+  ansible.builtin.service:
+    name: consul
+    enabled: yes
+
+- name: Restart service consul
+  ansible.builtin.service:
+    name: consul
+    state: restarted
