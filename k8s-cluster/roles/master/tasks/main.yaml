@@ -1,0 +1,31 @@
+---
+- name: copy clusterconfig
+  template:
+    src: clusterconfig.yaml
+    dest: /tmp/clusterconfig.yaml
+    mode: 0644
+    owner: root
+    group: root
+
+
+- name: init cluster
+  shell: kubeadm init --config /tmp/clusterconfig.yaml
+
+
+- name: Create a directory if it does not exist
+  ansible.builtin.file:
+    path: $HOME/.kube/
+    state: directory
+    mode: '0755'
+
+
+- name: copy kubeconfig
+  ansible.builtin.copy:
+    src: /etc/kubernetes/admin.conf
+    dest: $HOME/.kube/
+    follow: yes
+
+
+- name: install network plugn
+  shell: kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+

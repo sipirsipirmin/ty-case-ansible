@@ -1,0 +1,61 @@
+prometheus:
+  prometheusSpec:
+    tolerations:
+    - key: "key"
+      operator: "Equal"
+      value: "prometheus"
+      effect: "NoSchedule"
+grafana:
+  enabled: true
+  ingress:
+    enabled: true
+    paths:
+    - /
+    pathType: Prefix
+    hosts:
+    - grafana.sipirsipirmin.com
+
+prometheusOperator:
+  admissionWebhooks:
+    tolerations:
+    - key: "key"
+      operator: "Equal"
+      value: "prometheus"
+      effect: "NoSchedule"
+prometheusOperator:
+  tolerations:
+  - key: "key"
+    operator: "Equal"
+    value: "prometheus"
+    effect: "NoSchedule"
+kubeStateMetrics:
+  tolerations:
+  - key: "key"
+    operator: "Equal"
+    value: "prometheus"
+    effect: "NoSchedule"
+alertmanager:
+  alertmanagerSpec:
+    tolerations:
+    - key: "key"
+      operator: "Equal"
+      value: "prometheus"
+      effect: "NoSchedule"
+
+prometheus:
+  ingress:
+    enabled: true
+    paths:
+    - /
+    pathType: Prefix
+    hosts:
+    - prometheus.sipirsipirmin.com
+
+prometheusOperator:
+  admissionWebhooks:
+    patch:
+      tolerations:
+      - key: "key"
+        operator: "Equal"
+        value: "prometheus"
+        effect: "NoSchedule"

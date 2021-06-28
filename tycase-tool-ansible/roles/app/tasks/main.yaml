@@ -1,6 +1,6 @@
 ---
 
-- name: Install a list of packages (suitable replacement for 2.11 loop deprecation warning)
+- name: Install a python3 and supervisor
   yum:
     name:
       - python3
@@ -12,7 +12,7 @@
     name: supervisord
     enabled: yes
 
-- name: Create a directory if it does not exist
+- name: Create app directory if it does not exist
   ansible.builtin.file:
     path: /var/www
     state: directory
