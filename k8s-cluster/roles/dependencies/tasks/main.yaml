@@ -3,7 +3,11 @@
   modprobe:
     name: br_netfilter
     state: present
-    
+
+- name: stop firewalld
+  ansible.builtin.service:
+    name: firewalld
+    state: stopped    
 
 - name: enable bridge
   sysctl:
@@ -99,17 +103,24 @@
 - name: Restart service kubelet
   ansible.builtin.service:
     name: kubelet
-    state: restarted
-  
+    state: started
+
+
+- name: Enable kubelet
+  ansible.builtin.service:
+    name: kubelet
+    enabled: yes
+
+
 - name: Restart service containerd
   ansible.builtin.service:
     name: containerd
-    state: restarted
+    state: started
 
 - name: Restart service docker
   ansible.builtin.service:
     name: docker
-    state: restarted
+    state: started
 
 - name: Disable swap for current session
   command: swapoff -a
@@ -122,6 +133,4 @@
     replace: '#\1\2\3swap\4'
     backup: yes
 
-- name: cgroup conf
-  shell: echo "{'exec-opts':['native.cgroupdriver=systemd']}" >> /etc/docker/daemon.json
 
