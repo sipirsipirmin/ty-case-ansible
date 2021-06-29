@@ -1,4 +1,11 @@
 prometheus:
+  ingress:
+    enabled: true
+    paths:
+    - /
+    pathType: Prefix
+    hosts:
+    - prometheus.sipirsipirmin.com
   prometheusSpec:
     tolerations:
     - key: "key"
@@ -7,6 +14,11 @@ prometheus:
       effect: "NoSchedule"
 grafana:
   enabled: true
+  tolerations:
+  - key: "key"
+    operator: "Equal"
+    value: "prometheus"
+    effect: "NoSchedule"
   ingress:
     enabled: true
     paths:
@@ -17,17 +29,23 @@ grafana:
 
 prometheusOperator:
   admissionWebhooks:
-    tolerations:
-    - key: "key"
-      operator: "Equal"
-      value: "prometheus"
-      effect: "NoSchedule"
-prometheusOperator:
+    patch:
+      tolerations:
+      - key: "key"
+        operator: "Equal"
+        value: "prometheus"
+        effect: "NoSchedule"
   tolerations:
   - key: "key"
     operator: "Equal"
     value: "prometheus"
     effect: "NoSchedule"
+  admissionWebhooks:
+    tolerations:
+    - key: "key"
+      operator: "Equal"
+      value: "prometheus"
+      effect: "NoSchedule"
 kubeStateMetrics:
   tolerations:
   - key: "key"
@@ -41,21 +59,8 @@ alertmanager:
       operator: "Equal"
       value: "prometheus"
       effect: "NoSchedule"
-
-prometheus:
-  ingress:
-    enabled: true
-    paths:
-    - /
-    pathType: Prefix
-    hosts:
-    - prometheus.sipirsipirmin.com
-
-prometheusOperator:
-  admissionWebhooks:
-    patch:
-      tolerations:
-      - key: "key"
-        operator: "Equal"
-        value: "prometheus"
-        effect: "NoSchedule"
+tolerations:
+ - key: "key"
+   operator: "Equal"
+   value: "prometheus"
+   effect: "NoSchedule
