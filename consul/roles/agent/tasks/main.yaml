@@ -1,9 +1,16 @@
 ---
-- name: Add repository
-  yum_repository:
-    name: epel
-    description: HC YUM repo
-    baseurl: https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
+# - name: Add repository
+#   yum_repository:
+#     name: epel
+#     description: HC YUM repo
+#     baseurl: https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
+
+- name: consul repo add
+  shell: yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
+
+- name: update yum
+  yum:
+    update_only: yes
 
 - name: Install consul
   yum:
@@ -13,7 +20,7 @@
 
 - name: configure agent
   template:
-    src: consul.hcl
+    src: consul.hcl.j2
     dest: /etc/consul.d/consul.hcl
     mode: 0644
     owner: root
@@ -21,7 +28,7 @@
 
 - name: configure agent
   template:
-    src: prometheus-registry.json
+    src: prometheus-registry.json.j2
     dest: /etc/consul.d/prometheus-registry.json
     mode: 0644
     owner: root
