@@ -4,8 +4,16 @@
     - ansible-alertmanager
   vars:
     alertmanager_version: latest
+    alertmanager_pagerduty_url: "https://events.pagerduty.com/generic/2010-04-15/create_event.json"
+    alertmanager_receivers:
+      - name: pagerduty
+        pagerduty_configs:
+          - send_resolved: true
+            service_key: "{{ service_key }}"
+            severity: warning
     alertmanager_route:
       group_by: ['alertname', 'cluster', 'service']
       group_wait: 30s
       group_interval: 3m
       repeat_interval: 3h
+      receiver: pagerduty
