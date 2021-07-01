@@ -1,0 +1,7 @@
+datacenter = "dc1"
+data_dir = "/opt/consul"
+client_addr = "0.0.0.0"
+server = false
+retry_join = ["{{ server_join_addr }}"]
+bind_addr = {%raw%}"{{GetInterfaceIP \"eth0\"}}" {%endraw%}
+

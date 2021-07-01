@@ -1,0 +1,8 @@
+---
+- hosts: consul-agents
+  roles:
+    - agent
+  vars:
+    server_join_addr: "8.208.94.136"
+    client_addr: "prometheus.sipirsipirmin.com" # tasarım hatası
+    
