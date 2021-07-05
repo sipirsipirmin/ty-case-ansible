@@ -1,0 +1,35 @@
+---
+- name: Install gitlab dependencies
+  yum:
+    name:
+      - curl 
+      - policycoreutils-python 
+      - openssh-server 
+      - perl
+      - postfix
+      - ansible
+    state: present
+
+- name: Add gitlab repo
+  shell: curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.rpm.sh | sudo bash
+
+- name: Install gitlab 
+  yum:
+    name:
+      -  gitlab-ee
+    state: present
+  environment: 
+    EXTERNAL_URL: "http://gitlab.sipirsipirmin.com" 
+
+# cat /etc/gitlab/initial_root_password
+
+- name: add runner repo
+  shell: curl -L "https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.rpm.sh" | sudo bash
+
+- name: Install gitlab runner
+  yum:
+    name:
+      - gitlab-runner
+    state: present
+
+    

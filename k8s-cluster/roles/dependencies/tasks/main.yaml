@@ -26,10 +26,6 @@
     state: present
     reload: yes
 
-
-- name: Add repository
-  shell: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-
 - name: update yum
   yum:
     update_only: yes
@@ -38,8 +34,15 @@
   yum:
     name:
       - yum-utils
+      - openssl
     state: present
 
+- name: Add repository
+  shell: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+
+- name: update yum
+  yum:
+    update_only: yes
 
 - name: Install containerd
   yum:

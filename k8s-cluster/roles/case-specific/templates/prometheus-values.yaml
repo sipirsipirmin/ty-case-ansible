@@ -63,4 +63,4 @@ tolerations:
  - key: "key"
    operator: "Equal"
    value: "prometheus"
-   effect: "NoSchedule
+   effect: "NoSchedule"

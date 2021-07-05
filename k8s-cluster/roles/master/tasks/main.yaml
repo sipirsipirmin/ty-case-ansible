@@ -27,9 +27,8 @@
 
 
 - name: install network plugn
-  shell: kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml >>  network-plugin-initialized.txt
+  shell: kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml > network-plugin-initialized.txt
   args:
         chdir: $HOME
         creates: network-plugin-initialized.txt
   
-

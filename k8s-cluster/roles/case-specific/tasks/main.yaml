@@ -1,0 +1,27 @@
+- name: install helm
+  shell: curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+  environment: 
+   - HELM_INSTALL_DIR: /usr/bin
+
+- name: remove master taint
+  shell: kubectl taint nodes {{ master_hostname }} node-role.kubernetes.io/master=:NoSchedule-
+  ignore_errors: yes # i know, i know
+
+- name: add worker taint for only prometheus schedule
+  shell: kubectl taint nodes {{ worker_hostname }} key=prometheus:NoSchedule
+  ignore_errors: yes
+  
+
+- name: copy prometheus parameters
+  template:
+    src: prometheus-values.yaml
+    dest: /tmp/prometheus-values.yaml
+    mode: 0644
+    owner: root
+    group: root
+
+- name: add helm repo
+  shell: helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+
+- name: install prometheus
+  shell: helm install prometheus prometheus-community/kube-prometheus-stack -f /tmp/prometheus-values.yaml

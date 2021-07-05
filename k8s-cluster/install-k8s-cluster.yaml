@@ -1,4 +1,3 @@
-
 - hosts: master, workers
   gather_facts: yes
   become: yes
@@ -23,8 +22,6 @@
       set_fact:
         join_command: "{{ join_command_raw.stdout_lines[0] }}"
 
-
-
 - hosts: workers
   become: yes
   tasks:
@@ -33,3 +30,29 @@
       args:
         chdir: $HOME
         creates: node_joined.txt
+
+- hosts: master
+  become: yes
+  tasks:
+    - name: get master hostname
+      shell: hostname
+      register: master_hostname_raw
+
+    - name: set master hostname
+      set_fact:
+        master_hostname: "{{ master_hostname_raw.stdout_lines[0] }}"
+    
+    - name: get worker hostname
+      shell: kubectl get nodes -o name
+      register: worker_hostname_raw
+
+    - name: set worker hostname
+      set_fact:
+        worker_hostname: "{{ worker_hostname_raw.stdout_lines[1] }}"
+
+
+- hosts: master
+  gather_facts: true
+  become: yes
+  roles:
+    - { role: roles/case-specific }
