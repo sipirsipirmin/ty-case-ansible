@@ -1,2 +1,4 @@
 [consul-agents]
 8.208.78.246
+[consul-master]
+8.208.78.246
