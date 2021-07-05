@@ -25,3 +25,6 @@
 
 - name: install prometheus
   shell: helm install prometheus prometheus-community/kube-prometheus-stack -f /tmp/prometheus-values.yaml
+
+- name: install ingress
+  shell: kubectl apply -f https://raw.githubusercontent.com/sipirsipirmin/nginx-ingress-with-hostnetwork/master/deploy.yaml
