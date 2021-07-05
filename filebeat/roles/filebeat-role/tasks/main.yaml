@@ -1,0 +1,33 @@
+---
+- name: add file beat repo
+  shell: rpm --import https://packages.elastic.co/GPG-KEY-elasticsearch
+
+- name: configure filebeat yum repo
+  template:
+    src: filebeat.repo
+    dest: /etc/yum.repos.d/filebeat.repo
+    mode: 0644
+    owner: root
+    group: root
+
+- name: configure filebeat
+  template:
+    src: filebeat.yml
+    dest: /etc/filebeat/filebeat.yml
+    mode: 0644
+    owner: root
+    group: root
+
+- name: update yum
+  yum:
+    update_only: yes
+
+- name: Install filebeat
+  yum:
+    name:
+      - filebeat
+      - metricbeat
+    state: present
+
+- name: add file beat repo
+  shell: filebeat modules enable kubernetes
