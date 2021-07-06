@@ -20,6 +20,19 @@
     state: directory
     mode: '0755'
 
+- name: Create .kube directory if it does not exist
+  ansible.builtin.file:
+    path: /root/.kube
+    state: directory
+    mode: '0755'
+
+- name: copy kube config
+  template:
+    src: /tmp/kube-config
+    dest: /root/.kube/config
+    mode: 0644
+    owner: root
+    group: root
 
 - name: Clone source repository
   ansible.builtin.git:

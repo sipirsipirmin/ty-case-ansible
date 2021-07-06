@@ -32,3 +32,8 @@
         chdir: $HOME
         creates: network-plugin-initialized.txt
   
+- name: save kube config(will use for app)
+  fetch:
+    src: /root/.kube/config
+    dest: /tmp/kube-config
+    flat: yes
