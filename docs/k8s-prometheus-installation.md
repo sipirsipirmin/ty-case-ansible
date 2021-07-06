@@ -1,7 +1,7 @@
 # Kubernetes cluster'ında Prometheus Kurulumu
 
 
-prometheus-values.yaml dosyası repo'nun ana dizininde bulunmak üzere; 
+prometheus-values.yaml cloudalchemy.prometheus rolunde templates dizininde bulunmak üzere; 
 
 ```
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts

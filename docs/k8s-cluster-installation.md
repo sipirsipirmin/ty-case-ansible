@@ -1,12 +1,6 @@
-# K8s cluster'ının kurulumu
+# K8s cluster
 
-
-Inventory dosyası güncellendikten sonra aşağıdaki gibi çalıştırılabilir.
-
-```
-ansible-playbook install-k8s-cluster.yaml --inventory-file inventory
-```
-
+Kubernetes'in official dökümanları incelenerek ansible'ı oluşturulmuştur. 
 ### Bilinen eksik noktalar;
 
 - Token, vaultlanabilir veya rasgele oluşturulabilir

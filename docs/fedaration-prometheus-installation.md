@@ -1,11 +1,7 @@
 # Prometheus(Fedaration case)
 
 
-```
-ansible-playbook prometheus-playbook.yaml --inventory-file inventory
-```
-
-Ansible https://github.com/prometheus-community dan alınmıştır.
+Ansible https://github.com/prometheus-community dan alınmış ve konfigürasyonlarla özelleştirilmiştir.
 
 Service discovery için;
 
@@ -18,5 +14,5 @@ Service discovery için;
 
 ```
 
-Şeklinde bir konfigürasyon prometheus.yaml a eklenmiştir.
+Şeklinde bir konfigürasyon prometheus.yaml a eklenerek consule register olan servisler için discovery yapılmıştır.
 

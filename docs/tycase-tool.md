@@ -8,8 +8,6 @@ bulunan servisler elde edilmesi.
 
 ## Kurulum
 
-```
-ansible-playbook deploy-app-playbook.yaml --inventory-file inventory
-```
+App ve app-nginx roleleri çalıştırılarak haricen kurulabilir. 
 
 * Geliştirilen araca dair detaylı bilgi, aracın kaynak kodunun bulunduğu https://github.com/sipirsipirmin/tycase repoda bulunmaktadır.
