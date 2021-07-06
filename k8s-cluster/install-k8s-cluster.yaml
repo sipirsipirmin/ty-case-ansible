@@ -1,17 +1,17 @@
-- hosts: master, workers
+- hosts: k8s-master, k8s-workers
   gather_facts: yes
   become: yes
   roles:
-    - { role: roles/dependencies }
+    - { role: roles/k8s-dependencies }
 
 - hosts: master
   become: yes
   vars:
     master_ip: "{{ hostvars[groups['master'][0]]['ansible_default_ipv4'].address | default(groups['master'][0]) }}"
   roles:
-    - { role: roles/master }
+    - { role: roles/k8s-master }
 
-- hosts: master
+- hosts: k8s-master
   become: yes
   tasks:
     - name: get join command
@@ -22,7 +22,7 @@
       set_fact:
         join_command: "{{ join_command_raw.stdout_lines[0] }}"
 
-- hosts: workers
+- hosts: k8s-workers
   become: yes
   tasks:
     - name: join cluster
@@ -31,7 +31,7 @@
         chdir: $HOME
         creates: node_joined.txt
 
-- hosts: master
+- hosts: k8s-master
   become: yes
   tasks:
     - name: get master hostname
@@ -51,7 +51,7 @@
         worker_hostname: "{{ worker_hostname_raw.stdout_lines[1] }}"
 
 
-- hosts: master
+- hosts: k8s-master
   gather_facts: true
   become: yes
   roles:

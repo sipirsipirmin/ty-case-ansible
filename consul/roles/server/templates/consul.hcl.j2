@@ -1,0 +1,5 @@
+data_dir = "/opt/consul"
+server = true
+bind_addr = "{%raw%}{{GetInterfaceIP \"eth0\"}} {%endraw%}"
+advertise_addr = "{%raw%}{{GetInterfaceIP \"eth0\"}} {%endraw%}" 
+bootstrap_expect=1

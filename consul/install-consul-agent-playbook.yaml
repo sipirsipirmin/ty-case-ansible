@@ -1,5 +1,11 @@
 ---
+- hosts: consul-master
+  become: true
+  roles:
+    - server
+    
 - hosts: consul-agents
+  become: true
   roles:
     - agent
   vars:
