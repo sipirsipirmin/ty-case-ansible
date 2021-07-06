@@ -1,5 +1,0 @@
----
-- hosts: prometheus-fedaration
-  roles:
-  - cloudalchemy.prometheus
-  

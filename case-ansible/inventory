@@ -1,0 +1,13 @@
+[k8s-master]
+
+[k8s-workers]
+
+[consul-agents]
+
+[consul-master]
+
+[prometheus-fedaration]
+
+[app]
+
+[gitlab]

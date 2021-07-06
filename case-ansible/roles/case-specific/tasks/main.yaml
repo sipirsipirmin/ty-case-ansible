@@ -8,8 +8,7 @@
   ignore_errors: yes # i know, i know
 
 - name: add worker taint for only prometheus schedule
-  shell: kubectl taint nodes {{ worker_hostname }} key=prometheus:NoSchedule
-  ignore_errors: yes
+  shell: kubectl taint nodes {{ worker_hostname }} key=prometheus:NoSchedule --overwrite
   
 
 - name: copy prometheus parameters

@@ -1,0 +1,132 @@
+- hosts: k8s-master, k8s-workers
+  gather_facts: yes
+  become: yes
+  roles:
+    - { role: roles/k8s-dependencies }
+
+- hosts: k8s-master
+  become: yes
+  vars:
+    master_ip: "{{ hostvars[groups['k8s-master'][0]]['ansible_default_ipv4'].address | default(groups['k8s-master'][0]) }}"
+  roles:
+    - { role: roles/k8s-master }
+
+- hosts: k8s-master
+  become: yes
+  tasks:
+    - name: get join command
+      shell: kubeadm token create --print-join-command
+      register: join_command_raw
+
+    - name: set join command
+      set_fact:
+        join_command: "{{ join_command_raw.stdout_lines[0] }}"
+
+- hosts: k8s-workers
+  become: yes
+  tasks:
+    - name: join cluster
+      shell: "{{ hostvars[groups['k8s-master'][0]]['join_command'] }} >> node_joined.txt"
+      args:
+        chdir: $HOME
+        creates: node_joined.txt
+
+- hosts: k8s-master
+  become: yes
+  tasks:
+    - name: get master hostname
+      shell: hostname
+      register: master_hostname_raw
+
+    - name: set master hostname
+      set_fact:
+        master_hostname: "{{ master_hostname_raw.stdout_lines[0] }}"
+    
+    - name: get worker hostname
+      shell: kubectl get nodes -o name
+      register: worker_hostname_raw
+
+    - name: set worker hostname
+      set_fact:
+        worker_hostname: "{{ worker_hostname_raw.stdout_lines[1] }}"
+  
+
+
+- hosts: k8s-master
+  gather_facts: true
+  become: yes
+  roles:
+    - { role: roles/case-specific }
+
+
+# #
+#   # CONSUL
+# #
+
+- hosts: consul-master
+  become: true
+  roles:
+    - consul-server
+    
+- hosts: consul-agents
+  become: true
+  roles:
+    - consul-agent
+  vars:
+    server_join_addr: "{{hostvars[groups['consul-master'][0]]['ansible_default_ipv4'].address}}" # "8.208.94.136"
+    client_addr: "prometheus.sipirsipirmin.com" # tasarım hatası
+
+
+# #
+# # PROMETHEUS
+# #
+
+- hosts: prometheus-fedaration
+  roles:
+  - cloudalchemy.prometheus
+
+
+- hosts: prometheus-fedaration
+  roles:
+  - ansible-node-exporter  
+
+
+- hosts: prometheus-fedaration
+  roles:
+    - ansible-alertmanager
+  vars:
+    alertmanager_version: latest
+    alertmanager_pagerduty_url: "https://events.pagerduty.com/generic/2010-04-15/create_event.json"
+    alertmanager_receivers:
+      - name: pagerduty
+        pagerduty_configs:
+          - send_resolved: true
+            service_key: "{{ service_key }}"
+            severity: warning
+    alertmanager_route:
+      group_by: ['alertname', 'cluster', 'service']
+      group_wait: 30s
+      group_interval: 3m
+      repeat_interval: 3h
+      receiver: pagerduty
+
+#
+# APP
+#
+
+- hosts: app
+  gather_facts: yes
+  become: yes
+  roles:
+    - { role: roles/app }
+    - { role: roles/app-nginx }
+
+#
+# GITLAB
+#
+
+- hosts: gitlab
+  gather_facts: yes
+  become: yes
+  roles:
+    - { role: roles/gitlab }

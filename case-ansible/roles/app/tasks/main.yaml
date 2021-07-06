@@ -5,6 +5,8 @@
     name:
       - python3
       - supervisor
+      - git
+      - python3-virtualenv
     state: present
 
 - name: Enable supervisord
@@ -48,7 +50,12 @@
     requirements: /var/www/ty-case/requirements.txt
     virtualenv: /var/www/.env
     virtualenv_python: python3
+    virtualenv_command: /bin/virtualenv-3
 
+- name: Restart service supervisord
+  ansible.builtin.service:
+    name: supervisord
+    state: restarted
 
 - name: update supervisor
   shell: supervisorctl update

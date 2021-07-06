@@ -1,4 +1,10 @@
 ---
+- name: Install yum utils
+  yum:
+    name:
+      - yum-utils
+    state: present
+
 - name: consul repo add
   shell: yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
 
@@ -11,6 +17,14 @@
     name:
       - consul
     state: present
+
+# - name: get ipv4 addr
+#   shell: hostname -i
+#   register: client_addr_raw
+
+# - name: set ipv4 addr
+#   set_fact:
+#     client_addr: "{{ client_addr_raw.stdout_lines[0] }}"
 
 - name: configure agent
   template:
